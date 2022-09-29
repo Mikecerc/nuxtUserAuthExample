@@ -20,7 +20,7 @@ const postRegisterForm = async () => {
             <input v-model="username" type="text" name="username" placeholder="Username" />
             <input v-model="email"  type="text" name="email" placeholder="E-mail" />
             <input v-model="password" type="password" name="password" placeholder="Password" />
-            <input v-model="name" type="password" name="password2" placeholder="Name" />
+            <input v-model="name" type="text" name="password2" placeholder="Name" />
 
             <button @click="postRegisterForm()">BUTTON!</button>
         </div>
