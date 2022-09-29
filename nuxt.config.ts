@@ -4,4 +4,7 @@ export default defineNuxtConfig({
     nitro: {
         plugins: ["~/server/index.ts"],
       },
+    runtimeConfig: {
+      dbAuth: "",
+    }
 })

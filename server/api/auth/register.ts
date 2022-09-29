@@ -3,6 +3,7 @@ import { IUser } from "~~/types/IUser";
 import { IPassword } from "~~/types/IPassword";
 import { createUser } from "../../db/repositories/userRepository";
 import { doesUserExist } from "~~/server/services/userService";
+import { makeSession } from "~~/server/services/sessionService";
 import crypto from 'crypto';
 export default defineEventHandler(async (event: CompatibilityEvent) => {
     const body = await useBody(event);
@@ -13,7 +14,7 @@ export default defineEventHandler(async (event: CompatibilityEvent) => {
 
     const userExists = await doesUserExist(email, username);
     if (userExists.value == true) {
-        return sendError(event, createError({statusCode: 422, statusMessage: userExists.message}))
+        return sendError(event, createError({statusCode: 422, statusMessage: userExists.message}));
     }
     const hashedPassword = hashPassword(password);
     const userData: IUser = {
@@ -25,7 +26,7 @@ export default defineEventHandler(async (event: CompatibilityEvent) => {
     }
     
     const user = await createUser(userData);
-    //return await MakeSession(event, user);
+    return await makeSession(user, event);
 }); 
 
 function hashPassword(password: string): IPassword {
