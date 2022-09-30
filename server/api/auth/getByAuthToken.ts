@@ -6,6 +6,5 @@ import { CompatibilityEvent } from "h3";
 export default defineEventHandler<IUser>(async (event: CompatibilityEvent) => {
     const authToken = getCookie(event.req, "auth_token");
     const user = await getUserBySessionToken(authToken);
-
     return user; 
 })

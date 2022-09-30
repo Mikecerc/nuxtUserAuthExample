@@ -5,27 +5,30 @@ const email = ref(null);
 const password = ref(null);
 const username = ref(null);
 const name = ref(null);
-const hasError = ref(null);
-const errorMessage = ref(null);
+const errors = ref(new Map());
+const response = ref<FormValidation>({ hasErrors: false });
 
-const postRegisterForm = async () => {
-    await registerWithEmail(username.value, name.value, email.value, password.value);
-};
+async function postRegisterForm() {
+    response.value = await registerWithEmail(username.value, name.value, email.value, password.value);
+    errors.value = response.value.errors;
+}
 </script>
 <template>
-    <div id="login-box">
-        <div class="left">
-            <h1>Sign up</h1>
+    <div>
+        <div id="login-box">
+            <div class="left">
+                <h1>Sign up</h1>
 
-            <input v-model="username" type="text" name="username" placeholder="Username" />
-            <input v-model="email"  type="text" name="email" placeholder="E-mail" />
-            <input v-model="password" type="password" name="password" placeholder="Password" />
-            <input v-model="name" type="text" name="password2" placeholder="Name" />
+                <input v-model="username" type="text" name="username" placeholder="Username" />
+                <input v-model="email" type="text" name="email" placeholder="E-mail" />
+                <input v-model="password" type="password" name="password" placeholder="Password" />
+                <input v-model="name" type="text" name="password2" placeholder="Name" />
 
-            <button @click="postRegisterForm()">BUTTON!</button>
+                <button @click="postRegisterForm()">BUTTON!</button>
+            </div>
+            
         </div>
-
-        
+        <div v-if="errors">{{ errors }}</div>
     </div>
 </template>
 <style>
@@ -122,6 +125,4 @@ input[type="submit"]:active {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
     transition: 0.1s ease;
 }
-
-
 </style>

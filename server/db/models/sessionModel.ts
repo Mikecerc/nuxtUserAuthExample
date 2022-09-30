@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import { ISession } from "~~/types/iSession";
+import { userSchema } from "./userModel";
 export const sessionSchema = new mongoose.Schema<ISession>({
     authToken: String,
-    user: { type: mongoose.SchemaTypes.ObjectId, ref: 'userSchema' },
+    user: userSchema,
 });
 export const sessionModel = mongoose.model<ISession>("Session", sessionSchema, "sessions");

@@ -1,3 +1,6 @@
 <template>
-    hi
+    <div><p>home page</p></div>
 </template>
+<style>
+
+</style>

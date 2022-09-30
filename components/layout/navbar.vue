@@ -1,5 +1,9 @@
 <script setup lang="ts">
-
+import { userLogout } from "~/composables/useAuth";
+import { IUser } from "~~/types/IUser";
+const logout = userLogout
+const router = useRouter()
+const userAcc = useState<IUser>('user'); 
 </script>
 <template>
     <div class="container">
@@ -7,6 +11,7 @@
             <nuxt-link to="/login">login</nuxt-link>
             <nuxt-link to="/register">register</nuxt-link>
             <nuxt-link to="/">home</nuxt-link>
+            <user v-if="userAcc" />
         </nav>
     </div>
 </template>

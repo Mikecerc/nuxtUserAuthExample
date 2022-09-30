@@ -1,3 +1,3 @@
 <template>
-    hi!
+   <div>hi</div> 
 </template>
