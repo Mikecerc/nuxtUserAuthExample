@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { ISession } from "~~/types/iSession";
 import { IUser } from "~~/types/IUser";
 import { sessionModel } from "../models/sessionModel";
@@ -11,4 +12,8 @@ export async function getSessionByAuthToken(authToken: string): Promise<ISession
 }
 export async function getUserByAuthToken(authToken: string): Promise<IUser> {
     return await sessionModel.findOne({ authToken: authToken })
+}
+export async function getSessionById(id: mongoose.Schema.Types.ObjectId): Promise<ISession> {
+    return await sessionModel.findById(id);
+
 }

@@ -10,7 +10,10 @@ const response = ref<FormValidation>({ hasErrors: false });
 
 async function postRegisterForm() {
     response.value = await registerWithEmail(username.value, name.value, email.value, password.value);
-    errors.value = response.value.errors;
+    if (response.value) {
+        errors.value = response.value.errors;
+    }
+   
 }
 </script>
 <template>
@@ -21,14 +24,14 @@ async function postRegisterForm() {
 
                 <input v-model="username" type="text" name="username" placeholder="Username" />
                 <input v-model="email" type="text" name="email" placeholder="E-mail" />
-                <input v-model="password" type="password" name="password" placeholder="Password" />
+                <input v-model="password" type="text" name="password" placeholder="Password" />
                 <input v-model="name" type="text" name="password2" placeholder="Name" />
 
                 <button @click="postRegisterForm()">BUTTON!</button>
             </div>
             
         </div>
-        <div v-if="errors">{{ errors }}</div>
+        <div v-if="errors.size > 0">{{ errors }}</div>
     </div>
 </template>
 <style>

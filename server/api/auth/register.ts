@@ -5,7 +5,7 @@ import { createUser } from "../../db/repositories/userRepository";
 import { validateUser } from "~~/server/services/userService";
 import { makeSession } from "~~/server/services/sessionService";
 import { RegistationRequest } from "~~/types/IRegistration";
-import crypto from "crypto";
+import { hashPassword } from "~~/server/services/passwordService";
 export default async (event: CompatibilityEvent) => {
     const body = await readBody(event)
   const data = body.data as RegistationRequest
@@ -48,13 +48,3 @@ export default async (event: CompatibilityEvent) => {
     return await makeSession(user, event)
 };
 
-function hashPassword(password: string): IPassword {
-    var salt = crypto.randomBytes(128).toString("base64");
-    var iterations = 10000;
-    let hash = crypto.pbkdf2Sync(password, salt, iterations, 64, "sha512");
-    return {
-        salt: salt,
-        hash: hash.toString("hex"),
-        iterations: iterations,
-    };
-}
