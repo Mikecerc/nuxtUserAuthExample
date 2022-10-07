@@ -1,15 +1,16 @@
 import { CompatibilityEvent } from "h3";
 import { createSession, getSessionByAuthToken, getSessionById } from "../db/repositories/sessionRepository";
 import { IUser } from "~~/types/IUser";
-import { v4 as uuidv4 } from "uuid";
 import { sanitizeUserForFrontend } from "./userService";
 import { userModel } from "../db/models/userModel";
 import { ISession } from "~~/types/iSession";
+import { getToken } from "./jwtService";
+import { verify } from "./jwtService";
 
-export async function makeSession(user: IUser, event: CompatibilityEvent): Promise<IUser> {
+export async function makeSession(user: IUser, event: CompatibilityEvent): Promise<IUser | "401"> {
     let uModel = await userModel.findById(user.id);
     let session;
-    const authToken = uuidv4().replaceAll("-", "");
+    const authToken: string = await getToken(user.id.toString(), "refresh");
     if (uModel.session) {
        session = await getSessionById(uModel.session)
        session.authToken = authToken;
@@ -29,7 +30,17 @@ export async function makeSession(user: IUser, event: CompatibilityEvent): Promi
     throw Error("error creating session");
 }
 
-export async function getUserBySessionToken(authToken: string): Promise<IUser> {
-    const session = await getSessionByAuthToken(authToken);
-    return sanitizeUserForFrontend(session.user);
+export async function getUserBySessionToken(authToken: string): Promise<IUser | "401"> {
+    const decoded = verify(authToken);
+    if (decoded) {
+        const session = await getSessionByAuthToken(authToken);
+        if (session) {
+            const user = sanitizeUserForFrontend(session.user);
+            return user;
+        } else { 
+            return "401";
+        }
+    } else {
+        return "401"
+    }
 }

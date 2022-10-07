@@ -5,6 +5,8 @@ import { CompatibilityEvent } from "h3";
 
 export default defineEventHandler<IUser>(async (event: CompatibilityEvent) => {
     const authToken = getCookie(event.req, "auth_token");
-    const user = await getUserBySessionToken(authToken);
-    return user; 
+    const user: IUser | "401" = await getUserBySessionToken(authToken);
+    if (user instanceof IUser) {
+
+    }
 })
